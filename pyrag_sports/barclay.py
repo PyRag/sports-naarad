@@ -9,19 +9,6 @@ try:
 except ImportError:
     parser = 'html.parser'
 
-address = "172.31.1.4"
-port = "8080"
-user = "HITN051"
-password = "666729757"
-
-http_proxy  = "http://" + user + ":" + password + "@" + address + ":" + port
-https_proxy = "http://" + user + ":" + password + "@" + address + ":" + port
-ftp_proxy   = "http://" + user + ":" + password + "@" + address + ":" + port   
-proxyDict = { 
-              "http"  : http_proxy, 
-              "https" : https_proxy, 
-              "ftp"   : ftp_proxy
-            }
 
 months = {
               1  :  "JANUARY",
@@ -54,7 +41,7 @@ class Barclay(object):
         String : A collection of news headlines and links
         """
         url = "http://www.premierleague.com/en-gb.html"
-        res = requests.get(url,stream=True,proxies=proxyDict)
+        res = requests.get(url,stream=True)
         soup = bs4.BeautifulSoup(res.text,parser)
         all_updated = False
         news_headline = []
@@ -103,7 +90,7 @@ class Barclay(object):
     def pointsTable(self, type_return='string'):
         url = 'http://www.premierleague.com/en-gb/matchday/league-table.html'
 
-        res = requests.get(url, stream=True, proxies=proxyDict)
+        res = requests.get(url, stream=True)
         soup = bs4.BeautifulSoup(res.text,parser)
 
         team_name = soup(template = '.leagueTable-Club')
@@ -145,7 +132,7 @@ class Barclay(object):
     def topScorers(self, type_return='string'):
         url = "http://www.premierleague.com/en-gb.html"
 
-        res = requests.get(url, stream=True, proxies=proxyDict)
+        res = requests.get(url, stream=True)
         soup = bs4.BeautifulSoup(res.text, parser)
 
         top_scorers = soup.select('.statsranking-topscorers .statsranking-table .statsranking-name a')
@@ -169,7 +156,7 @@ class Barclay(object):
     def Fixtures(self, type_return='string'):
         url = "http://www.premierleague.com/en-gb/matchday/matches.html?paramClubId=ALL&paramComp_8=true&view=.dateSeason"
 
-        res = requests.get(url, stream=True, proxies=proxyDict)
+        res = requests.get(url, stream=True)
         soup = bs4.BeautifulSoup(res.text, parser)
         fixtures_time = []
         fixtures_location = []
@@ -199,7 +186,7 @@ class Barclay(object):
     def Results(self, type_return='string'):
         url = "http://www.premierleague.com/en-gb.html"
 
-        res = requests.get(url, stream=True, proxies=proxyDict)
+        res = requests.get(url, stream=True)
         soup = bs4.BeautifulSoup(res.text, parser)
 
         results_time = soup.select('.megamenu-date span')
@@ -234,7 +221,7 @@ class Barclay(object):
 
     def liveScore(self, type_return='string'):
         self.url = 'http://www.premierleague.com/en-gb.html'
-        self.res = requests.get(self.url, stream=True, proxies=proxyDict)
+        self.res = requests.get(self.url, stream=True)
         self.soup = bs4.BeautifulSoup(self.res.text, parser)
 
         matches = self.soup.select('.LIVE  .MEGAMENU-MATCHnAME')
@@ -251,7 +238,7 @@ class Barclay(object):
     def playerStats(self, name, type_return='string'):
         try:
             self.url = 'http://www.premierleague.com/en-gb/players/profile.html/' + name
-            self.res = requests.get(self.url, stream=True, proxies=proxyDict)
+            self.res = requests.get(self.url, stream=True)
             self.soup = bs4.BeautifulSoup(self.res.text, parser)
 
             stats = self.soup.select('.left td')

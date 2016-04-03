@@ -4,7 +4,7 @@ from pyrag_sports.extern.tabulate import tabulate
 
 def main():
     """\
-    Usage: sport-api [-h] [-F] [-C] live_score|news|[player_stats name] [-my_fav_team]
+    Usage: pyrag [-h] [-F] [-C] live_score|news|[player_stats name] [-my_fav_team]
 
     Get latest updates for football and cricket
 
