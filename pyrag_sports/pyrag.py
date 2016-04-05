@@ -39,7 +39,7 @@ def main():
         sys.exit(0)
     try:
         if '-proxy' in args:
-            with open('proxy.config') as f:
+            with open(sys.path[0]+'/proxy.config', 'w') as f:
                 f.write(args[args.index('-proxy')+1])
         if args[1] == '-F' or args[1] == '--football' or args[1] == '-f':
             if '-c' in args or '-C' in args or '--cricket' in args:

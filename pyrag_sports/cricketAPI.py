@@ -1,18 +1,29 @@
 import requests
 import os
 import bs4
+
 try:
     from flask import Flask
     from flask import request
     app = Flask(__name__)
 except:
     pass
-parser = ''
+
 try:
     import lxml
     parser = 'lxml'
 except ImportError:
     parser = 'html.parser'
+
+try:
+    with open(sys.path[0]+'/proxy.config','r') as f:
+        proxies = f.read()
+        proxy_dict = { "http": proxies,
+                       "https": proxies,
+                     }
+except:
+    import urllib
+    proxy_dict = urllib.getproxies()
 class Cricket(object):
     def get_player_stats(self, playerName, type_return='string'):
         base_url="http://www.espncricinfo.com"
@@ -21,7 +32,7 @@ class Cricket(object):
         names=playerName.split('-')
         playerName="+".join(names)
         url=url+playerName
-        res=requests.get(url)
+        res=requests.get(url, stream=True, proxies=proxy_dict)
         res.raise_for_status()
         soup=bs4.BeautifulSoup(res.text, parser)
         playerStatLink=soup.select(".ColumnistSmry") 
@@ -50,7 +61,7 @@ class Cricket(object):
 
     def live_score(self, type_return='string'):
 
-        response = requests.get('http://www.cricbuzz.com/live-scores')
+        response = requests.get('http://www.cricbuzz.com/live-scores', stream=True, proxies=proxy_dict)
         soup = bs4.BeautifulSoup(response.text, parser)
         team_mate = soup.findAll("div", {"class" : "cb-lv-main"})
         scores = []
@@ -61,7 +72,7 @@ class Cricket(object):
         return str(scores)
 
     def list_matches(self, type_return='string'):
-        response = requests.get('https://cricket.yahoo.com/matches/schedule')
+        response = requests.get('https://cricket.yahoo.com/matches/schedule', stream=True, proxies=proxy_dict)
         soup = bs4.BeautifulSoup(response.text, parser)
         head_list = soup.findAll("em", {"class": "ycric-table-heading"})
         invited_team_list = soup.findAll("div", {"class": "ycric-table-sub-heading"})
@@ -108,7 +119,7 @@ class Cricket(object):
     def news(self, type_return='string'):
          
          base_url='http://www.cricbuzz.com/cricket-news/latest-news'
-         res=requests.get(base_url)
+         res=requests.get(base_url, stream=True, proxies=proxy_dict)
          soup = bs4.BeautifulSoup(res.text, parser)
          news = soup.select(".cb-col-33 a")
          news_dict={}
