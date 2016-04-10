@@ -2,9 +2,9 @@
 A collection of command line tool and web API
 ## Installing Command line tool for pyrag
 You must have python3 installed on your local system.
-Download the [zip](https://github.com/npcoder2k14/HackInTheNorth-PYRAG/archive/dev.zip) file or clone the repository dev's branch
+Download the [zip](https://github.com/PyRag/sports-naarad/archive/master.zip) file or clone the repository master branch
 ```bash
-$ git clone https://github.com/npcoder2k14/HackInTheNorth-PYRAG/
+$ git clone https://github.com/PyRag/sports-naarad
 ```
 Install the requirements
 ```bash
@@ -16,8 +16,8 @@ $ python3 setup.py install
 ```
 # Usage
 ```bash
-$ pyrag -h
-Usage: pyrag [-h] [-F] [-C] live_score|news|[player_stats name] [-my_fav_team]
+$ sports-naarad -h
+Usage: sports-narad [-h] [-F] [-C] live_score|news|[player_stats name] [-my_fav_team]
 
 Get latest updates for football and cricket
 
@@ -45,7 +45,7 @@ player-stats[name]]       Fields to get. `live-scores` to get live socre of
 -proxy                    To specify proxy. Defaults to system proxy. Take name of
                           a file. Sample -proxy http://username:password@host:port/
 
-$ pyrag -F barclay topscorer
+$ sports-naarad -F barclay topscorer
 ╒══════════════════╤═══════════════╕
 │ Player Name      │   Goal Scored │
 ╞══════════════════╪═══════════════╡

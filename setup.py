@@ -5,22 +5,22 @@ if sys.argv[-1] == 'setup.py':
     print('To install, run \'python setup.py install\'')
     print()
 
-sys.path.insert(0, 'pyrag')
+sys.path.insert(0, 'sports_naarad')
 
 if __name__ == "__main__":
     setup(
-        name = 'pyrag',
+        name = 'sport-naarad',
         version = '0.1',
         author = 'pyrag-groups',
         author_email = 'utkarsh.gupta550@gmail.com',
         description = 'Get latest updates for football and cricket on command-line',
-        url='https://github.com/npcoder2k14/HackInTheNorth-PYRAG',
-        keywords='pyrag is a command line tool to get updates for football and cricket',
-        packages = ['pyrag_sports', 'pyrag_sports.extern'],
+        url='',
+        keywords='sports-naarad is a command line tool to get updates for football and cricket',
+        packages = ['sports_naarad', 'sports_naarad.extern'],
         license = 'MIT License',
         entry_points = {
             'console_scripts': [
-            'pyrag = pyrag_sports.pyrag:main',
+            'sports-naarad = sports_naarad.naarad:main',
             ]
         },
         install_requires = ['beautifulsoup4', 'requests',
