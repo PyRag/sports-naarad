@@ -1,11 +1,11 @@
 import sys
 import textwrap
-from pyrag_sports.extern.tabulate import tabulate
+from sports_naarad.extern.tabulate import tabulate
 
 
 def main():
     """\
-    Usage: pyrag [-h] [-F] [-C] live_score|news|[player_stats name] [-my_fav_team]
+    Usage: sports-naarad [-h] [-F] [-C] live_score|news|[player_stats name] [-my_fav_team]
 
     Get latest updates for football and cricket
 
@@ -30,8 +30,10 @@ def main():
                               can give additional options topscorer.
                               Use `-` instead of space in names.
 
-    -proxy                    To specify proxy. Defaults to system proxy. Take name of
+    --proxy                   To specify proxy. Defaults to system proxy. Take name of
                               a file. Sample -proxy http://username:password@host:port/
+    
+    --unset-proxy             Removes the proxy set by using --proxy option.
     """
     useage = textwrap.dedent(main.__doc__)
     args = sys.argv
@@ -39,9 +41,12 @@ def main():
         print(useage)
         sys.exit(0)
     try:
-        if '-proxy' in args:
+        if '--proxy' in args:
             with open(sys.path[0] + '/proxy.config', 'w') as f:
                 f.write(args[args.index('-proxy') + 1])
+        if '--unset-proxy' in args:
+            import os
+            os.reomve(sys.path[0] + '/proxy.config')
         if args[1] == '-F' or args[1] == '--football' or args[1] == '-f':
             if '-c' in args or '-C' in args or '--cricket' in args:
                 raise ValueError(
@@ -49,7 +54,7 @@ def main():
             if args[2] == 'uefa':
                 pass
             elif args[2].lower() == 'barclay':
-                from pyrag_sports.barclay import Barclay
+                from sports_naarad.barclay import Barclay
                 if args[3].lower() == 'fixtures':
                     fixture = Barclay().Fixtures(type_return='dict')
                     header = ['Clubs', 'Time(UTC)', 'Location']
@@ -86,7 +91,7 @@ def main():
                 raise ValueError(
                     'Not a Valid argument!\n Use -h option for help')
         if args[1] == '-C' or args[1] == '-c' or args[1] == '--cricket':
-            from pyrag_sports.cricketAPI import Cricket
+            from sports_naarad.cricketAPI import Cricket
             if '-f' in args or '--football' in args:
                 raise ValueError(
                     'Both Cricket and Football cannot be specifed together!')
