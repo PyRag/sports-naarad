@@ -1,4 +1,4 @@
-# PyRag Sports AP
+# PyRag Sports API
 A collection of command line tool and web API
 ## Installing Command line tool for pyrag
 You must have python3 installed on your local system.
