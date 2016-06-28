@@ -12,7 +12,7 @@ months = {
               3  :  "MARCH",
               4  :  "APRIL",
               5  :  "MAY",
-              6  :  "JUNE", 
+              6  :  "JUNE",
               7  :  "JULY",
               8  :  "AUGUST",
               9  :  "SEPTEMBER",
@@ -54,7 +54,7 @@ for football news : go to /foot/news/ <br>
 for football pointstable : go to /foot/pointstable/ <br>
 <br>
 for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          # There will be no double quotes hii"""
-        
+
 
     def get_news_headlines(self, get_club_news=False, type_return='string'):
         """
@@ -91,16 +91,21 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
         return_dict = {}
         for i, name in enumerate(news_headline):
             return_dict[name] = news_url[i]
-
+        """ 
         #if type_return == 'dict':
         return_dict=json.dumps(return_dict)
         return str(return_dict)
+        """
+        final_res=jsonify(result=return_dict)
+        final_res.status_code = 200
+        final_res.headers['Access-Control-Allow-Origin'] = '*'
+        return final_res
 
     def next3Fixtures(self, type_return='string'):
         now = datetime.datetime.now()
         url = "http://www.premierleague.com/en-gb/matchday/league-table.html?season=2015-2016&month=" +\
                 months[now.month] + "&timelineView=date&toDate=1451433599999&tableView=NEXT_3_FIXTURES"
-                
+
         res = requests.get(url, stream=True)
         soup = bs4.BeautifulSoup(res.text,'lxml')
         team_names = soup(template = '.next3FixturesTable')
@@ -114,11 +119,16 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
         return_dict = {}
         for i in range(len(team_names)):
             return_dict[team_names[i]] = next_3_fixtures[i]
-
+        """
         if type_return == 'dict':
             return_dict=json.dumps(return_dict)
             return return_dict
-
+        """
+        final_res=jsonify(result=return_dict)
+        final_res.status_code = 200
+        final_res.headers['Access-Control-Allow-Origin'] = '*'
+        return final_res
+        
     def pointsTable(self, type_return='string'):
         url = 'http://www.premierleague.com/en-gb/matchday/league-table.html'
 
@@ -156,9 +166,14 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
         return_dict = {}
         for i in range (len(team_name)):
             return_dict[team_name[i]] = [matches_played[i], matches_won[i], matches_drew[i], matches_lost[i], goals_difference[i], points[i]]
-
+        """
         return_dict=json.dumps(return_dict)
         return return_dict
+        """
+        final_res=jsonify(result=return_dict)
+        final_res.status_code = 200
+        final_res.headers['Access-Control-Allow-Origin'] = '*'
+        return final_res
 
     def topScorers(self, type_return='string'):
         url = "http://www.premierleague.com/en-gb.html"
@@ -181,7 +196,11 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
             return_dict[top_scorers[i]] = top_scorers_goals[i]
 
         
-        return str(return_dict).encode("utf-8")
+        #return str(return_dict).encode("utf-8")
+        final_res=jsonify(result=str(return_dict).encode("utf-8"))
+        final_res.status_code = 200
+        final_res.headers['Access-Control-Allow-Origin'] = '*'
+        return final_res
 
     def Fixtures(self, return_type='string'):
         url = "http://www.premierleague.com/en-gb/matchday/matches.html?paramClubId=ALL&paramComp_8=true&view=.dateSeason"
@@ -207,7 +226,12 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
             for i in range(len(fixtures_l)):
                 fixtures_location.append(str(fixtures_l[i].text))
 
-        return str(list(zip(fixtures_clubs, fixtures_time, fixtures_location)))
+        #return str(list(zip(fixtures_clubs, fixtures_time, fixtures_location)))
+        return_list=list(zip(fixtures_clubs, fixtures_time, fixtures_location))
+        final_res=jsonify(result=return_list)
+        final_res.status_code = 200
+        final_res.headers['Access-Control-Allow-Origin'] = '*'
+        return final_res
 
     def Results(self, type_return='string'):
         url = "http://www.premierleague.com/en-gb.html"
@@ -240,7 +264,12 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
         results_location = results_location[0:20]
         results_location.reverse()
         if len(str(zip(results_time, results_clubs, results_location)))!=0:
-          return str(zip(results_time, results_clubs, results_location))
+          return_list=list(zip(results_time, results_clubs, results_location))
+          final_res=jsonify(result=return_list)
+          final_res.status_code = 200
+          final_res.headers['Access-Control-Allow-Origin'] = '*'
+          return final_res
+          #return str(zip(results_time, results_clubs, results_location))
         else :
             return "NO data found"
 
@@ -256,7 +285,11 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
             temp = ' '.join(temp)
             live_matches.append(temp)
 
-        return str(live_matches)
+        #return str(live_matches)
+        final_res=jsonify(result=live_matches)
+        final_res.status_code = 200
+        final_res.headers['Access-Control-Allow-Origin'] = '*'
+        return final_res
 
     def playerStats(self):
         try:
@@ -276,9 +309,13 @@ for football player stats : go to /foot/stats/?player-name=PLAYER_NAME          
             statsDict[temp[8]] = temp[9]
             statsDict[temp[12]] = temp[13]
             statsDict[temp[16]] = temp[17]
-            statsDict = json.dumps(statsDict)
-            return str(statsDict)
-        
+            #statsDict = json.dumps(statsDict)
+            #return str(statsDict)
+            final_res=jsonify(result=statsDict)
+            final_res.status_code = 200
+            final_res.headers['Access-Control-Allow-Origin'] = '*'
+            return final_res
+
         except:
             raise ValueError('Name not found, enter a valid name of player!')
 
@@ -291,14 +328,14 @@ class Cricket(object):
         res=requests.get(url)
         res.raise_for_status()
         soup=bs4.BeautifulSoup(res.text,"lxml")
-        playerStatLink=soup.select(".ColumnistSmry") 
+        playerStatLink=soup.select(".ColumnistSmry")
         playerStatLink=playerStatLink[1]
         temp_url=playerStatLink.get('href')
         url=base_url+temp_url
         res=requests.get(url)
         soup=bs4.BeautifulSoup(res.text,"lxml")
         player_info=soup.select(".ciPlayerinformationtxt")
-        player_stats={}   
+        player_stats={}
         for item in player_info[0:len(player_info)]:
             b=item.find('b')
             if b.string=="Major teams":
@@ -310,24 +347,60 @@ class Cricket(object):
                 temp=item.find('span')
                 temp=temp.string
             player_stats[b.string]=temp
+        """    
         if type_return == 'dict':
             return player_stats
         else:
             player_stats = json.dumps(player_stats)
             return str(player_stats)
+        """
+        final_res=jsonify(result=player_stats)
+        final_res.status_code = 200
+        final_res.headers['Access-Control-Allow-Origin'] = '*'
+        return final_res     
 
     def live_score(self, type_return='string'):
-
-        response = requests.get('http://www.cricbuzz.com/live-scores')
-        soup = bs4.BeautifulSoup(response.text,"lxml")
-        team_mate = soup.findAll("div", {"class" : "cb-lv-main"})
-        scores = []
-        for i in team_mate:
-            scores.append(i.text)
-        if type_return == 'dict':
-            return scores
-        return str(scores)
-
+      live_score=[]
+      url="http://www.cricbuzz.com/live-scores"
+      res=requests.get(url)
+      soup=bs4.BeautifulSoup(res.text,"lxml")
+      live = soup.findAll("div",{"class" : "cb-lv-main"})
+      i=int()
+      for i in range(len(live)):
+        Headline=str()
+        try:
+         Headline=live[i].find('div',attrs={'class':'text-bold'}).text
+        except:
+         Headline=live_score[i-1]['Headline']  
+        match_title=live[i].find('a',attrs={'class' : 'text-hvr-underline'}).text
+        match_link="http://www.cricbuzz.com"+live[i].find('a').get('href')
+        name_of_the_match_in_the_series=live[i].findAll('div',attrs={'class' : 'text-gray'})[0].text
+        match_venue=live[i].findAll('div',attrs={'class' : 'text-gray'})[1].text
+        match_timestamp=live[i].find('span',attrs={'class' : 'schedule-date'}).get('timestamp')
+        tmp=live[i].findAll('div',attrs={'class' : 'cb-lv-scrs-col'})
+        tmp2=tmp[:-1]
+        tmp2=tmp2[0].findAll('span',attrs={'class' : 'text-bold'})
+        #print(tmp[0].text)
+        #string = string.replace(u'\xa0', u' ')
+        match_score=tmp[0].text
+        match_score = match_score.replace(u'\xa0',' ')   
+        match_status=tmp[-1].text
+        live_dict={}
+        live_dict['Headline']=str(Headline)
+        live_dict['match_title']=str(match_title)
+        live_dict['match_link']=str(match_link)
+        live_dict['name_of_the_match_in_the_series']=str(name_of_the_match_in_the_series)
+        live_dict['match_venue']=str(match_venue)
+        live_dict['match_timestamp']=str(match_timestamp)
+        live_dict['match_score']=match_score
+        live_dict['match_status']=str(match_status)
+        # print(live_dict)
+        live_score.append(live_dict)
+      final_res=jsonify(result=live_score)
+      final_res.status_code = 200
+      final_res.headers['Access-Control-Allow-Origin'] = '*'
+      return final_res  
+        
     def list_matches(self, type_return='string'):
         response = requests.get('https://cricket.yahoo.com/matches/schedule')
         soup = bs4.BeautifulSoup(response.text,"lxml")
@@ -369,13 +442,19 @@ class Cricket(object):
                 matches[header] = []
                 heading = heading+1
             matches[header].append((team_list[i].lstrip(), tour_dates_list[i].text.lstrip(), venue[i].lstrip(), result[i].lstrip()))
+        final_res=jsonify(result=matches)
+        final_res.status_code = 200
+        final_res.headers['Access-Control-Allow-Origin'] = '*'
+        return final_res 
+        """
         if type_return == 'dict':
             return matches
         matches = json.dumps(matches)
         return str(matches)
-
+        """
+        
     def news(self, type_return='string'):
-         
+
          base_url='http://www.cricbuzz.com/cricket-news/latest-news'
          res=requests.get(base_url)
          soup = bs4.BeautifulSoup(res.text,"html.parser")
@@ -385,12 +464,18 @@ class Cricket(object):
          for all_news in news:
              if str(all_news.get("title"))!="More Photos" and str(all_news.get("title"))!="None":
                  news_dict[all_news.get("title")]=url+all_news.get("href")
+         
+         final_res=jsonify(result=news_dict)
+         final_res.status_code = 200
+         final_res.headers['Access-Control-Allow-Origin'] = '*'
+         return final_res        
+         """        
          if type_return == 'dict':
             return news_dict
          news_dict = json.dumps(news_dict)
          return str(news_dict)
-		
-       
+         """ 
+
 
 if __name__=='__main__':
     cricc =  Cricket()
@@ -398,7 +483,7 @@ if __name__=='__main__':
     app.add_url_rule('/cric/matches/',view_func=cricc.list_matches)
     app.add_url_rule('/cric/live/',view_func=cricc.live_score)
     app.add_url_rule('/cric/player_stats/',view_func=cricc.get_player_stats)
-    
+
     foot=Barclay()
     app.add_url_rule('/',view_func=foot.documentation)
     app.add_url_rule('/foot/news/',view_func=foot.get_news_headlines)
