@@ -4,7 +4,9 @@ from selenium.webdriver.common.keys import Keys
 from flask import Flask
 from flask import request,jsonify
 import json
+from werkzeug.contrib.fixers import ProxyFix
 app=Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app)
 posts={"cric-news":[]}
 months = {
               1  :  "JANUARY",
@@ -378,13 +380,23 @@ class Cricket(object):
         match_venue=live[i].findAll('div',attrs={'class' : 'text-gray'})[1].text
         match_timestamp=live[i].find('span',attrs={'class' : 'schedule-date'}).get('timestamp')
         tmp=live[i].findAll('div',attrs={'class' : 'cb-lv-scrs-col'})
-        tmp2=tmp[:-1]
-        tmp2=tmp2[0].findAll('span',attrs={'class' : 'text-bold'})
-        #print(tmp[0].text)
-        #string = string.replace(u'\xa0', u' ')
-        match_score=tmp[0].text
-        match_score = match_score.replace(u'\xa0',' ')   
-        match_status=tmp[-1].text
+        tmp2="No data Found!!"
+        if len(tmp) > 1 :
+         tmp2=tmp[:-1]
+         tmp2=tmp2[0].findAll('span',attrs={'class' : 'text-bold'})
+         #print(tmp[0].text)
+         #string = string.replace(u'\xa0', u' ')
+        if len(tmp) > 0 :  
+          match_score=tmp[0].text
+        else:
+          match_score="No data Found!!" 
+        match_score = match_score.replace(u'\xa0',u' ')
+        #print(len(tmp2))
+        #print(match_score)
+        if len(tmp) > 0:
+          match_status=tmp[-1].text
+        else:
+          match_status="No data Found!!"
         live_dict={}
         live_dict['Headline']=str(Headline)
         live_dict['match_title']=str(match_title)
